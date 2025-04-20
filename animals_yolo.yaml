@@ -1,0 +1,6 @@
+
+train: /content/drive/MyDrive/AI_Internship/task3/animals_yolo/images/train
+val: /content/drive/MyDrive/AI_Internship/task3/animals_yolo/images/val
+
+nc: 2
+names: ['cat', 'dog']
