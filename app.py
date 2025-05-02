@@ -16,72 +16,62 @@ def load_model():
 
 model = load_model()
 
-# App title
-st.title("🐾 Dog & Cat Object Detection!")
+st.title("🐶 YOLOv5 Object Detection App (Cats & Dogs)")
 
-# Custom CSS styling
-st.markdown("""
-    <style>
-    .stApp {
-        background-color: #CAF0F8; /* Light Yellow Background */
-        font-family: 'Roboto', sans-serif; /* Modern Font */
-    }
-
-    h1 {
-        color: #4db6ac; /* Teal Accent Color */
-        text-align: center;
-        font-size: 3em;
-        margin-bottom: 30px;
-        text-shadow: 2px 2px #80cbc4; /* Subtle Text Shadow */
-    }
-
-    img {
-        border-radius: 15px;
-        box-shadow: 0 6px 12px rgba(0,0,0,0.15); /* Enhanced Shadow */
-        margin-bottom: 25px;
-    }
-
-    .stFileUploader {
-        background-color: #f0f4c3; 
-        border-radius: 10px;
-        border: 1px solid #e6ee9c;
-    }
-
-    .stFileUploader label {
-        color: #26a69a; /* Darker Teal */
-        font-weight: bold;
-        font-size: 1.1em;
-    }
-
-    .stMarkdown h2 {
-        color: #00897b; /* Even Darker Teal */
-        margin-top: 30px;
-        border-bottom: 2px solid #4db6ac; /* Teal Underline */
-        padding-bottom: 5px;
-    }
-
-    .streamlit-image-label {
-        color: #64dd17; /* Lime Green for Labels */
-        background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
-        padding: 5px 8px;
-        border-radius: 5px;
-        font-size: 0.9em;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-
-uploaded_file = st.file_uploader("Upload a picture of your furry friend!", type=['jpg', 'png', 'jpeg'])
+uploaded_file = st.file_uploader("Upload an image", type=['jpg', 'png', 'jpeg'])
 
 if uploaded_file is not None:
     image = Image.open(uploaded_file)
-    st.image(image, caption="📸 Your Adorable Upload!", use_container_width=True)
-
+    
     # Perform detection
     results = model(image)
-
-    # Show result
-    st.subheader("🐾 Dog / Cat Identifications:")
     results.render()
     rendered_img = Image.fromarray(results.ims[0])
-    st.image(rendered_img, caption="✨ Here are the Detected Objects!", use_container_width=True)
+
+    # Create two columns to show images side by side
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.subheader("📤 Original Image")
+        st.image(image, use_container_width=True)
+
+    with col2:
+        st.subheader("📍 Detection Result")
+        st.image(rendered_img, use_container_width=True)
+
+st.markdown(
+    """
+    <style>
+    /* App background */
+    [data-testid="stAppViewContainer"] {
+        background-color: #066839; /* Greenish background */
+        color: #ffffff; /* Default text color */
+    }
+
+    /* Title */
+    h1 {
+        font-family: 'Arial Black', sans-serif;
+        font-size: 2.8rem;
+        color: #ffffff;
+    }
+
+
+    /* File uploader */
+    [data-testid="stFileUploader"] {
+        background-color: #95D5B2;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+
+    /* Image styling */
+    img {
+        border: 4px solid #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    
+    </style>
+    """,
+    unsafe_allow_html=True
+)
